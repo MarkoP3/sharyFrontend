@@ -1,18 +1,47 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import OptionScreen from "./Components/OptionScreen/OptionScreen";
+import OptionScreen from "./Components2/OptionScreen/OptionScreen";
 import AcceptorScreen from "./Components/AcceptorScreen/AcceptorScreen";
 import LoginScreen from "./Components/LoginScreen/LoginScreen";
 import DonorBusinessScreen from "./Components/DonorScreen/DonorBusinessScreen";
 import DonorIndividualScreen from "./Components/DonorScreen/DonorIndividualScreen";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { HubConnectionBuilder } from "@aspnet/signalr";
+import {
+  Route,
+  BrowserRouter as Router,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+import LoginContainer from "./Containers/LoginContainer/LoginContainer";
+import Navbar from "./Components2/Navbar/Navigation";
+import Navigation from "./Components2/Navbar/Navigation";
+import IndividualAccountScreen from "./Components2/IndividualAccountScreen/IndividualAccountScreen";
+import IndividualAccountContainer from "./Containers/IndividualContainers/AccountContainer/IndividualAccountContainer";
+import IndividualDonationContainer from "./Containers/IndividualContainers/DonationContainer/IndividualDonationContainer";
+import Footer from "./Components2/Footer/Footer";
+import Loader from "./Components2/Loader/Loader";
+import DonationConfirmation from "./Components2/DonationConfirmation/DonationConfirmation";
+const hubConnection = new HubConnectionBuilder()
+  .withUrl("https://localhost:5001/user")
+  .build();
+hubConnection
+  .start()
+  .then(() => {
+    console.log(`Uspesno smo konektovani`);
+    hubConnection.invoke("SendMessage", "user1", "poruka 1");
+  })
+  .catch((error) => {
+    console.log(`error`, error);
+  });
 function App() {
-  const [accountType, setaccountType] = useState(
+  /*const [accountType, setaccountType] = useState(
     localStorage.getItem("accountType") != null
       ? localStorage.getItem("accountType")
       : "individual"
   );
+
   const [accountData, setaccountData] = useState();
   const [moneyDonations, setmoneyDonations] = useState([]);
   const [solidarityDonations, setsolidarityDonations] = useState([]);
@@ -128,7 +157,7 @@ function App() {
     }
   }, [activeScreen]);
   useEffect(async () => {
-    if (window.location.pathname == "/donation/money/success") {
+    if (window.location.path == "/donation/money/success") {
       let props = window.location.search.split("&");
       let individualID = props[0].split("=")[1];
       let quantity = props[1].split("=")[1];
@@ -151,7 +180,7 @@ function App() {
         .finally(() => {
           window.location = "/";
         });
-    } else if (window.location.pathname == "/donation/solidarity/success") {
+    } else if (window.location.path == "/donation/solidarity/success") {
       let props = window.location.search.split("&");
       let individualID = props[0].split("=")[1];
       let quantity = props[1].split("=")[1];
@@ -178,31 +207,75 @@ function App() {
         });
     }
     refreshAccountData();
+  }, []);*/
+
+  /*
+
+<OptionScreen changeScreen={changeScreen}></OptionScreen>
+            <AcceptorScreen changeScreen={changeScreen}></AcceptorScreen>
+            <LoginScreen
+              changeScreen={changeScreen}
+              accountType={accountType}
+              handleAccountTypeChange={handleAccountTypeChange}
+              refreshAccountData={refreshAccountData}
+            ></LoginScreen>
+            <DonorIndividualScreen
+              changeScreen={changeScreen}
+              accountData={accountData}
+              moneyDonations={moneyDonations}
+              solidarityDonations={solidarityDonations}
+              mealPrice={mealPrice}
+              solidarityCountries={solidarityCountries}
+              solidarityCities={solidarityCities}
+              solidarityBusinesses={solidarityBusinesses}
+              getSolidarityBusinesses={getSolidarityBusinesses}
+              getSolidarityCities={getSolidarityCities}
+              logOut={logOut}
+            ></DonorIndividualScreen>
+            <DonorBusinessScreen
+              changeScreen={changeScreen}
+            ></DonorBusinessScreen>
+
+*/
+  const [loader, setloader] = useState(true);
+  useEffect(() => {
+    setloader(false);
   }, []);
   return (
     <div>
-      <OptionScreen changeScreen={changeScreen}></OptionScreen>
-      <AcceptorScreen changeScreen={changeScreen}></AcceptorScreen>
-      <LoginScreen
-        changeScreen={changeScreen}
-        accountType={accountType}
-        handleAccountTypeChange={handleAccountTypeChange}
-        refreshAccountData={refreshAccountData}
-      ></LoginScreen>
-      <DonorIndividualScreen
-        changeScreen={changeScreen}
-        accountData={accountData}
-        moneyDonations={moneyDonations}
-        solidarityDonations={solidarityDonations}
-        mealPrice={mealPrice}
-        solidarityCountries={solidarityCountries}
-        solidarityCities={solidarityCities}
-        solidarityBusinesses={solidarityBusinesses}
-        getSolidarityBusinesses={getSolidarityBusinesses}
-        getSolidarityCities={getSolidarityCities}
-        logOut={logOut}
-      ></DonorIndividualScreen>
-      <DonorBusinessScreen changeScreen={changeScreen}></DonorBusinessScreen>
+      <Loader show={loader}></Loader>
+      <Router>
+        <Switch>
+          <Route path="/options">
+            <OptionScreen></OptionScreen>
+          </Route>
+          <Route path="/acceptor"></Route>
+          <Route path="/:accountType/login">
+            <LoginContainer></LoginContainer>
+          </Route>
+          <Route path="/business/register"></Route>
+          <Route path="/business"></Route>
+          <Route path="/individual/register"></Route>
+          <Route path="/individual/account">
+            <Navigation accountType="individual"></Navigation>
+            <IndividualAccountContainer></IndividualAccountContainer>
+            <Footer></Footer>
+          </Route>
+          <Route path="/individual/donations">
+            <Navigation accountType="individual"></Navigation>
+            <IndividualDonationContainer></IndividualDonationContainer>
+            <Footer></Footer>
+          </Route>
+          <Route path="/:accountType/donation/:donationType/:confirmationType">
+            <DonationConfirmation></DonationConfirmation>
+          </Route>
+          <Route path="/station"></Route>
+          <Route path="/admin"></Route>
+          <Route path="/">
+            <Redirect to="/options"></Redirect>
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

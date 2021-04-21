@@ -1,0 +1,7 @@
+.btnContainer * {
+  display: block;
+  margin-top: 20px;
+}
+.screen {
+  background-color: #9cd8f7;
+}
