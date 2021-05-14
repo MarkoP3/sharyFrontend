@@ -15,17 +15,30 @@ function DonationConfirmation() {
       let quantity = donationData.get("quantity");
       let mealPriceID = donationData.get("mealPriceID");
       let sessionID = donationData.get("sessionId");
-      IndividualServices.confirmMoneyDonation(
-        individualID,
-        quantity,
-        mealPriceID,
-        sessionID
-      ).then(({ data, status }) => {
-        alert(status);
-        history.push("individual/donations");
-      });
+      if (donationType == "solidarity") {
+        let businessID = donationData.get("businessID");
+        IndividualServices.confirmSolidarityDonation(
+          individualID,
+          quantity,
+          mealPriceID,
+          sessionID,
+          businessID
+        ).then((data) => {
+          history.push("/individual/donations");
+        });
+      } else {
+        IndividualServices.confirmMoneyDonation(
+          individualID,
+          quantity,
+          mealPriceID,
+          sessionID
+        ).then((data) => {
+          alert(data);
+          history.push("/individual/donations");
+        });
+      }
     } else {
-      history.push("individual/account");
+      history.push("/individual/account");
     }
   }, []);
   return (

@@ -1,8 +1,10 @@
 import React from "react";
 import { Nav, Navbar } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
+import LoginServices from "../../Services/LoginServices/LoginServices";
 import "./Navigation.css";
 function Navigation({ accountType }) {
+  const history = useHistory();
   return (
     <Navbar bg="light" expand="lg">
       <Navbar.Toggle
@@ -35,6 +37,16 @@ function Navigation({ accountType }) {
           </NavLink>
         </Nav>
       </Navbar.Collapse>
+      <input
+        type="button"
+        onClick={(e) =>
+          LoginServices.logOut(accountType).then((data) => {
+            history.push(`/${accountType}/login`);
+          })
+        }
+        className="btn btn-dark"
+        value="Logout"
+      />
     </Navbar>
   );
 }

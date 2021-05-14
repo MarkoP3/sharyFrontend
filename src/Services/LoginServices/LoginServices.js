@@ -10,5 +10,10 @@ const LoginServices = {
       { withCredentials: true }
     );
   },
+  logOut: (accountType) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}${accountType}/logout`, {
+      withCredentials: true,
+    });
+  },
 };
 export default LoginServices;

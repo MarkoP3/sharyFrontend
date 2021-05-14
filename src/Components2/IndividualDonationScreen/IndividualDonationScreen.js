@@ -12,13 +12,30 @@ function IndividualDonationScreen({
   donateSolidarity,
   donateMoney,
   mealPrice,
+  solidarityBusinesses,
 }) {
   const quantityMD = useRef();
   const [totalMD, settotalMD] = useState(0);
   const [showMD, setShowMD] = useState(false);
+
+  const quantitySD = useRef();
+  const toBusinessSD = useRef();
+  const [totalSD, settotalSD] = useState(0);
   const handleMD = () => {
     donateMoney(quantityMD.current.value);
     setShowMD(false);
+  };
+  const handleSD = () => {
+    console.log(`object`, toBusinessSD.current.selectedIndex);
+    console.log(
+      `toBusiness.current.value`,
+      toBusinessSD.current.options[toBusinessSD.current.selectedIndex].id
+    );
+    donateSolidarity(
+      quantitySD.current.value,
+      toBusinessSD.current.options[toBusinessSD.current.selectedIndex].id
+    );
+    setShowSD(false);
   };
   const handleShowMD = () => setShowMD(true);
   const [showSD, setShowSD] = useState(false);
@@ -79,11 +96,16 @@ function IndividualDonationScreen({
           </div>
           <span>Select a business that you want to donate to:</span>
           <br />
-          <select class="custom-select m-2"></select>
+          <select ref={toBusinessSD} class="custom-select m-2">
+            {solidarityBusinesses.map((business) => {
+              return <option id={business.id}>{business.name}</option>;
+            })}
+          </select>
           <br />
           <span>Enter the amount of meals that you want to donate:</span>
           <form>
             <input
+              ref={quantitySD}
               align="center"
               type="number"
               id="quantity"
@@ -95,7 +117,7 @@ function IndividualDonationScreen({
         </Modal.Body>
         <Modal.Footer>
           <div>Total:300 RSD</div>
-          <Button variant="primary" onClick={handleCloseSD}>
+          <Button variant="primary" onClick={handleSD}>
             Donate
           </Button>
         </Modal.Footer>

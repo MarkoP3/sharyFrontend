@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { ButtonGroup, Button } from "react-bootstrap";
-import "./CenterCard.css";
+// import "./CenterCard.css";
 import FoodBasket from "../../../Assets/img/foodBasket.svg";
 import { Link, NavLink } from "react-router-dom";
 
