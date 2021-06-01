@@ -4,8 +4,8 @@ const LoginServices = {
     return axios.post(
       `${process.env.REACT_APP_API_URL}${accountType}/authenticate`,
       {
-        username: usern,
         password: pass,
+        username: usern,
       },
       { withCredentials: true }
     );

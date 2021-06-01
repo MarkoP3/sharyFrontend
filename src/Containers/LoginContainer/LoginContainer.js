@@ -10,9 +10,11 @@ function LoginContainer() {
   let { accountType } = useParams();
   const [loader, setloader] = useState(true);
   useEffect(() => {
-    IndividualServices.checkAuthentification(accountType)
+    IndividualServices.checkAuthentification(
+      localStorage.getItem("accountType")
+    )
       .then((data) => {
-        history.push(`/${accountType}/account`);
+        history.push(`/${localStorage.getItem("accountType")}/account`);
       })
       .catch((error) => {
         console.log(`error`, error);
@@ -24,6 +26,7 @@ function LoginContainer() {
     LoginServices.authenticate(accountType, username, password)
       .then((data) => {
         history.push(`/${accountType}/account`);
+        localStorage.setItem("accountType", accountType);
       })
       .catch((error) => {
         console.error(error);

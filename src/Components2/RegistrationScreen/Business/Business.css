@@ -1,32 +1,3 @@
-.screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-.business {
-  background-color: #d9534f !important;
-}
-.station {
-  background-color: #336d8f !important;
-}
-.individual {
-  background-color: #9cd8f7 !important;
-}
-.formContainer {
-  min-height: calc(100vh - 44px);
-  background-color: #9cd8f7;
-  padding: 50px !important;
-}
-.formContainer .form {
-  background-color: white;
-  padding: 30px;
-  -webkit-box-shadow: 0 1px 200px 0 rgba(69, 90, 100, 0.08);
-  box-shadow: 0 1px 200px 0 rgba(69, 90, 100, 0.08);
-}
 .card {
   background-color: white;
   box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);

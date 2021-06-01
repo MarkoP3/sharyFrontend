@@ -14,27 +14,22 @@ function IndividualDonationScreen({
   mealPrice,
   solidarityBusinesses,
 }) {
+  console.log(`solidarityBusinesses`, solidarityBusinesses);
   const quantityMD = useRef();
   const [totalMD, settotalMD] = useState(0);
   const [showMD, setShowMD] = useState(false);
 
   const quantitySD = useRef();
   const toBusinessSD = useRef();
+  const [priceSD, setpriceSD] = useState(0);
+  const [currencySD, setcurrencySD] = useState("RSD");
   const [totalSD, settotalSD] = useState(0);
   const handleMD = () => {
     donateMoney(quantityMD.current.value);
     setShowMD(false);
   };
   const handleSD = () => {
-    console.log(`object`, toBusinessSD.current.selectedIndex);
-    console.log(
-      `toBusiness.current.value`,
-      toBusinessSD.current.options[toBusinessSD.current.selectedIndex].id
-    );
-    donateSolidarity(
-      quantitySD.current.value,
-      toBusinessSD.current.options[toBusinessSD.current.selectedIndex].id
-    );
+    donateSolidarity(quantitySD.current.value, toBusinessSD.current.value);
     setShowSD(false);
   };
   const handleShowMD = () => setShowMD(true);
@@ -91,14 +86,30 @@ function IndividualDonationScreen({
             Meal Price:
           </div>
           <div align="center" style={{ fontSize: "30px" }}>
-            <span>300</span>
-            <span>RSD</span>
+            <span>{priceSD}</span>
+            <span>{currencySD}</span>
           </div>
           <span>Select a business that you want to donate to:</span>
           <br />
-          <select ref={toBusinessSD} class="custom-select m-2">
+          <select
+            ref={toBusinessSD}
+            onChange={(e) => {
+              setpriceSD(
+                solidarityBusinesses.filter(
+                  (el) => el.id == toBusinessSD.current.value
+                )[0].mealPrice
+              );
+              setcurrencySD(
+                solidarityBusinesses.filter(
+                  (el) => el.id == toBusinessSD.current.value
+                )[0].currency
+              );
+            }}
+            class="custom-select m-2"
+          >
+            <option>Select business</option>
             {solidarityBusinesses.map((business) => {
-              return <option id={business.id}>{business.name}</option>;
+              return <option value={business.id}>{business.name}</option>;
             })}
           </select>
           <br />
@@ -111,12 +122,15 @@ function IndividualDonationScreen({
               id="quantity"
               min="1"
               required=""
+              onChange={(e) => settotalSD(quantitySD.current.value * priceSD)}
               className=" form-control m-2"
             />
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <div>Total:300 RSD</div>
+          <div>
+            Total:{totalSD} {currencySD}
+          </div>
           <Button variant="primary" onClick={handleSD}>
             Donate
           </Button>

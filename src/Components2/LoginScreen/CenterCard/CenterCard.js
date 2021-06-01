@@ -29,7 +29,9 @@ function CenterCard({ accountType, loginHandler }) {
       </div>
       <div
         className={`cardFooter ${
-          accountType == "business" || accountType == "individual"
+          accountType == "business" ||
+          accountType == "individual" ||
+          accountType == "station"
             ? "d-block"
             : "d-none"
         }`}
@@ -40,6 +42,9 @@ function CenterCard({ accountType, loginHandler }) {
           </NavLink>
           <NavLink to="/business/login" className="btn btn-danger">
             Business
+          </NavLink>
+          <NavLink to="/station/login" className="btn btn-danger">
+            Station
           </NavLink>
         </ButtonGroup>
         <br></br>

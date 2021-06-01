@@ -23,6 +23,12 @@ import IndividualDonationContainer from "./Containers/IndividualContainers/Donat
 import Footer from "./Components2/Footer/Footer";
 import Loader from "./Components2/Loader/Loader";
 import DonationConfirmation from "./Components2/DonationConfirmation/DonationConfirmation";
+import AccountContainer from "./Containers/BusinessContainers/AccountContainer/AccountContainer";
+import DonationContainer from "./Containers/BusinessContainers/DonationContainer/DonationContainer";
+import SharingContainer from "./Containers/BusinessContainers/SharingContainer/SharingContainer";
+import BusinessRegistrationContainer from "./Containers/RegistrationContainer/BusinessRegistrationContainer";
+import AcceptorContainer from "./Containers/AcceptorContainer/AcceptorContainer";
+import StationReceiveContainer from "./Containers/StationContainer/StationReceiveConatiner/StationReceiveContainer";
 const hubConnection = new HubConnectionBuilder()
   .withUrl("https://localhost:5001/user")
   .build();
@@ -249,12 +255,30 @@ function App() {
           <Route path="/options">
             <OptionScreen></OptionScreen>
           </Route>
-          <Route path="/acceptor"></Route>
+          <Route path="/acceptor">
+            <AcceptorContainer></AcceptorContainer>
+          </Route>
           <Route path="/:accountType/login">
             <LoginContainer></LoginContainer>
           </Route>
-          <Route path="/business/register"></Route>
-          <Route path="/business"></Route>
+          <Route path="/business/register">
+            <BusinessRegistrationContainer></BusinessRegistrationContainer>
+          </Route>
+          <Route path="/business/account">
+            <Navigation accountType="business"></Navigation>
+            <AccountContainer></AccountContainer>
+            <Footer></Footer>
+          </Route>
+          <Route path="/business/donations">
+            <Navigation accountType="business"></Navigation>
+            <DonationContainer></DonationContainer>
+            <Footer></Footer>
+          </Route>
+          <Route path="/business/share">
+            <Navigation accountType="business"></Navigation>
+            <SharingContainer></SharingContainer>
+            <Footer></Footer>
+          </Route>
           <Route path="/individual/register"></Route>
           <Route path="/individual/account">
             <Navigation accountType="individual"></Navigation>
@@ -269,7 +293,19 @@ function App() {
           <Route path="/:accountType/donation/:donationType/:confirmationType">
             <DonationConfirmation></DonationConfirmation>
           </Route>
-          <Route path="/station"></Route>
+          <Route path="/station/account">
+            <Navigation accountType="station"></Navigation>
+            <Footer></Footer>
+          </Route>
+          <Route path="/station/share">
+            <Navigation accountType="station"></Navigation>
+            <Footer></Footer>
+          </Route>
+          <Route path="/station/receive">
+            <Navigation accountType="station"></Navigation>
+            <StationReceiveContainer></StationReceiveContainer>
+            <Footer></Footer>
+          </Route>
           <Route path="/admin"></Route>
           <Route path="/">
             <Redirect to="/options"></Redirect>
